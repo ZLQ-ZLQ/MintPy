@@ -9,10 +9,11 @@ docs/examples/dev/*
 docs/resources/*logo*
 docs/resources/*.ai
 docs/resources/*.pdf
+docs/deps.svg
 isce.log
-mintpy/dev/*
 mintpy/modis*
 setup.py
 site/
 test/unwrap_error_bridging/
-docs/deps.svg
+
+
