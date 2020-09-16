@@ -48,6 +48,7 @@ EXAMPLE = """example:
   view.py timeseries.h5 --ex drop_date.txt      #exclude dates to plot
   view.py timeseries.h5 '*2017*'                #all acquisitions in 2017
   view.py timeseries.h5 '*2017*' '*2018*'       #all acquisitions in 2017 and 2018
+  view.py timeseries.h5 20200616_20200908       #reconstruct interferogram on the fly
 
   view.py ifgramStack.h5 coherence
   view.py ifgramStack.h5 unwrapPhase-           #unwrapPhase only in the presence of unwrapPhase_bridging
@@ -752,10 +753,17 @@ def read_dataset_input(inps):
         if len(inps.dset) > 0:
             print('input dataset: "{}"'.format(inps.dset))
 
-        # search
+        # special rule for special file types
         if inps.key == 'velocity':
             inps.search_dset = False
             vprint('turning glob search OFF for {} file'.format(inps.key))
+
+        elif inps.key == 'timeseries' and len(inps.dset) == 1 and '_' in inps.dset[0]:
+            date1, date2 = inps.dset[0].split('_')
+            inps.dset = [date2]
+            inps.ref_date = date1
+
+        # search
         inps.dsetNumList = search_dataset_input(inps.sliceList,
                                                 inps.dset,
                                                 inps.dsetNumList,
@@ -777,6 +785,7 @@ def read_dataset_input(inps):
             inps.dset = [obj.sliceList[0].split('-')[0]]
         else:
             inps.dset = inps.sliceList
+
         inps.dsetNumList = search_dataset_input(inps.sliceList,
                                                 inps.dset,
                                                 inps.dsetNumList,
@@ -796,10 +805,12 @@ def read_dataset_input(inps):
     if inps.ref_date:
         if inps.key not in timeseriesKeyNames:
             inps.ref_date = None
+
         ref_date = search_dataset_input(inps.sliceList,
                                         [inps.ref_date],
                                         [],
                                         inps.search_dset)[0][0]
+
         if not ref_date:
             vprint('WARNING: input reference date is not included in input file!')
             vprint('input reference date: '+inps.ref_date)
