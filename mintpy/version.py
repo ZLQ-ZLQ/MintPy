@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 # grab version / date of the latest commit
+
+
 import os
 import subprocess
 
 
 ###########################################################################
+
 def get_release_info(version='v1.2.3', date='2020-07-14'):
     """Grab version and date of the latest commit from a git repository"""
     # go to the repository directory
@@ -31,11 +34,31 @@ def get_release_info(version='v1.2.3', date='2020-07-14'):
     # go back to the original directory
     os.chdir(dir_orig)
     return version, date
+
+
 ###########################################################################
 
 release_version, release_date = get_release_info()
 
 # generate_from: http://patorjk.com/software/taag/
+logo2 = """
+___________________________________________________________
+
+  /##      /## /##             /##     /#######           
+ | ###    /###|__/            | ##    | ##__  ##          
+ | ####  /#### /## /#######  /######  | ##  \ ## /##   /##
+ | ## ##/## ##| ##| ##__  ##|_  ##_/  | #######/| ##  | ##
+ | ##  ###| ##| ##| ##  \ ##  | ##    | ##____/ | ##  | ##
+ | ##\  # | ##| ##| ##  | ##  | ## /##| ##      | ##  | ##
+ | ## \/  | ##| ##| ##  | ##  |  ####/| ##      |  #######
+ |__/     |__/|__/|__/  |__/   \___/  |__/       \____  ##
+                                                 /##  | ##
+                                                |  ######/
+   Miami InSAR Time-series software in Python    \______/ 
+          MintPy {v}, {d}
+___________________________________________________________
+""".format(v=release_version, d=release_date)
+
 logo = """
 _________________________________________________
  ____    ____   _            _   _______          
@@ -46,7 +69,7 @@ _________________________________________________
 |_____||_____|[___][___||__]\__/|_____| [\_:  /   
                                          \__.'    
 
-   Miami InSAR Time-series software in Python  
+   Miami InSAR Time-series software in Python
           MintPy {v}, {d}
 _________________________________________________
 """.format(v=release_version, d=release_date)
